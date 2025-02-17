@@ -1,0 +1,66 @@
+name: Java CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on PRs targeting the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Set up JDK 17
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+
+    # Install dependencies (Maven, Gradle, etc.)
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Build with Maven
+      run: mvn clean install -DskipTests
+
+    # Run unit tests
+    - name: Run unit tests
+      run: mvn test
+
+    # Build package
+    - name: Build package
+      run: mvn package
+
+    # Deploy to AWS Elastic Beanstalk
+    - name: Set up AWS CLI
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Deploy to AWS Elastic Beanstalk
+      run: |
+        echo "Deploying to Elastic Beanstalk..."
+
+        # Zip the artifact (e.g., .jar or .war file)
+        zip target/your-app-name.jar your-app-name.zip
+
+        # Deploy to AWS Elastic Beanstalk
+        eb init -p java -r ${{ secrets.AWS_REGION }} --no-verify-ssl
+        eb use your-environment-name
+
+        # Deploy the application
+        eb deploy
