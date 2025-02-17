@@ -43,24 +43,24 @@ jobs:
     - name: Build package
       run: mvn package
 
-    # Deploy to AWS Elastic Beanstalk
-    - name: Set up AWS CLI
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+    # # Deploy to AWS Elastic Beanstalk
+    # - name: Set up AWS CLI
+    #   uses: aws-actions/configure-aws-credentials@v2
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Deploy to AWS Elastic Beanstalk
-      run: |
-        echo "Deploying to Elastic Beanstalk..."
+    # - name: Deploy to AWS Elastic Beanstalk
+    #   run: |
+    #     echo "Deploying to Elastic Beanstalk..."
 
-        # Zip the artifact (e.g., .jar or .war file)
-        zip target/your-app-name.jar your-app-name.zip
+    #     # Zip the artifact (e.g., .jar or .war file)
+    #     zip target/your-app-name.jar your-app-name.zip
 
-        # Deploy to AWS Elastic Beanstalk
-        eb init -p java -r ${{ secrets.AWS_REGION }} --no-verify-ssl
-        eb use your-environment-name
+    #     # Deploy to AWS Elastic Beanstalk
+    #     eb init -p java -r ${{ secrets.AWS_REGION }} --no-verify-ssl
+    #     eb use your-environment-name
 
-        # Deploy the application
-        eb deploy
+    #     # Deploy the application
+    #     eb deploy
