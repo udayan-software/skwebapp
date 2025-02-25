@@ -39,7 +39,7 @@ jobs:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           echo '${{ secrets.GCP_SA_KEY }}' > gcp-key.json
-          export GOOGLE_APPLICATION_CREDENTIALS=$PWD/gcp-key.json
+          export GOOGLE_APPLICATION_CREDENTIALS=gcp-key.json
         run: |
           packer init ./packer
           packer fmt ./packer
