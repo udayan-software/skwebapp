@@ -15,11 +15,6 @@ source "googlecompute" "ubuntu" {
 build {
   sources = ["source.googlecompute.ubuntu"]
 
-  provisioner "file" {
-    source      = "appshell/setup.sh"
-    destination = "/tmp/setup.sh"
-  }
-
   provisioner "shell" {
     inline = [
       "sudo apt update",
