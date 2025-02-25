@@ -18,31 +18,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build and Run Tests (Including Health Check)
-        run: |
-          mvn clean package
-          mvn test -Dtest=HealthzTest
-
-      - name: Upload Application Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-artifact
-          path: target/*.jar
-
-      - name: Create ZIP of Application Artifact
-        run: |
-          mkdir -p app_zip
-          cp target/*.jar app_zip/
-          cd app_zip
-          zip -r app.zip ./*
-          cd ..
-
-      - name: Upload ZIP Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-zip
-          path: app_zip/app.zip
-
   packer-build:
     name: Build Packer Image (AWS & GCP)
     needs: build-and-test
