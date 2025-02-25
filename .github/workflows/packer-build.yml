@@ -34,11 +34,11 @@ jobs:
       - name: Install Packer
         uses: hashicorp/setup-packer@main
 
-      - name: Download Artifact
+      - name: Download Packer directory
         uses: actions/download-artifact@v4
         with:
-          name: app-artifact
-          path: ./
+          name: packer-config
+          path: packer/  # Download directly into the packer directory
 
       - name: Build Packer Image
         env:
