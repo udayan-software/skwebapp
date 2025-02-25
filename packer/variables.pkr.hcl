@@ -29,3 +29,11 @@ variable "gcp_service_account_email" {
 variable "ssh_username" {
   type = string
 }
+
+variable "gcp_network" {
+  type = string
+}
+
+variable "gcp_subnetwork" {
+  type = string
+}
