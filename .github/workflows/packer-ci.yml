@@ -17,6 +17,9 @@ jobs:
       - name: Install Packer
         uses: hashicorp/setup-packer@main
 
+      - name: Initialize Packer
+        run: packer init ./packer
+
       - name: Run packer fmt
         run: |
           packer fmt -check -diff ./packer || (echo "Run 'packer fmt' locally to fix formatting issues!" && exit 1)
