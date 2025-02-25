@@ -23,8 +23,14 @@ build {
   provisioner "shell" {
     inline = [
       "sudo apt update",
-      "sudo apt install -y openjdk-17-jdk mysql-server",
+      "sudo apt install -y nginx",
+      "sudo systemctl enable nginx",
+      "sudo systemctl start nginx",
+      "sudo ufw allow 'Nginx Full'",
+      "sudo apt install -y openjdk-17-jdk",
+      "sudo apt install -y mysql-server",
       "sudo systemctl enable mysql",
+      "sudo systemctl start mysql.service",
       "sudo ufw allow 8080/tcp",
       "sudo ufw allow 3306/tcp",
       "sudo ufw reload",

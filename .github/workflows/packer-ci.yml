@@ -36,5 +36,5 @@ jobs:
 
       - name: Validate Packer template
         run: |
-          packer init .
-          packer validate -var-file=values.pkrvars.hcl ./packer
+          packer init ./packer
+          packer validate -var-file=packer/values.pkrvars.hcl ./packer
