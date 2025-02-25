@@ -22,6 +22,7 @@ build {
       "sudo systemctl enable nginx",
       "sudo systemctl start nginx",
       "sudo ufw allow 'Nginx Full'",
+      "sudo apt install -y tomcat9 tomcat9-admin",
       "sudo apt install -y openjdk-17-jdk",
       "sudo apt install -y mysql-server",
       "sudo systemctl enable mysql",
