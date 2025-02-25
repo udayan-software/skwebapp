@@ -1,0 +1,78 @@
+name: Build Packer Image
+
+on:
+  push:
+    branches:
+      - main  # Runs only when PR is merged
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build and Run Tests (Including Health Check)
+        run: |
+          mvn clean package
+          mvn test -Dtest=HealthzTest
+
+      - name: Upload Application Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-artifact
+          path: target/*.jar
+
+      - name: Create ZIP of Application Artifact
+        run: |
+          mkdir -p app_zip
+          cp target/*.jar app_zip/
+          cd app_zip
+          zip -r app.zip ./*
+          cd ..
+
+      - name: Upload ZIP Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-zip
+          path: app_zip/app.zip
+
+  packer-build:
+    name: Build Packer Image (AWS & GCP)
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # provider: [aws, gcp]
+        provider: [gcp]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-artifact
+          path: ./
+
+      - name: Build Packer Image
+        env:
+          # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          echo '${{ secrets.GCP_SA_KEY }}' > gcp-key.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$PWD/gcp-key.json
+        run: |
+          packer init ./packer
+          packer fmt ./packer
+          packer validate -var-file=packer/values.pkrvars.hcl ./packer
+          packer build -var-file=packer/values.pkrvars.hcl -only=googlecompute.ubuntu -var

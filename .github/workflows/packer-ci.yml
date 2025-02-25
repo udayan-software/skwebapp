@@ -1,0 +1,40 @@
+name: Packer CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  packer-fmt:
+    name: Check Packer Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Initialize Packer
+        run: packer init ./packer
+
+      - name: Run packer fmt
+        run: |
+          packer fmt -check -diff ./packer || (echo "Run 'packer fmt' locally to fix formatting issues!" && exit 1)
+
+  packer-validate:
+    name: Validate Packer Template
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Validate Packer template
+        run: |
+          packer init ./packer
+          packer validate -var-file=packer/values.pkrvars.hcl ./packer
