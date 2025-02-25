@@ -29,7 +29,6 @@ build {
       "sudo ufw allow 8080/tcp",
       "sudo ufw allow 3306/tcp",
       "sudo ufw reload",
-      "sudo chmod +x /tmp/setup.sh",
       "echo 'Build Complete'"
     ]
   }
