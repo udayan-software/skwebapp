@@ -16,7 +16,7 @@ build {
   sources = ["source.googlecompute.ubuntu"]
 
   provisioner "file" {
-    source      = "appshell/setup.sh"
+    source      = "../appshell/setup.sh"
     destination = "/tmp/setup.sh"
   }
 
