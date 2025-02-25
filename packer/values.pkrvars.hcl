@@ -8,7 +8,3 @@ ssh_username              = "ubuntu"
 gcp_service_account_email = "packer-build"
 gcp_network               = "default"
 gcp_subnetwork            = "default"
-
-aws_subnet_id     = "subnet-xxxxxxxx" # Replace with your Default VPC Subnet ID
-aws_vpc_id        = "vpc-xxxxxxxx" # Replace with your Default VPC ID
-aws_security_group_ids = ["sg-xxxxxxxx"] # Security Group ID allowing SSH
